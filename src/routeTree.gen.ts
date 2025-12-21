@@ -9,96 +9,164 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as TodoIndexRouteImport } from './routes/todo/index'
-import { Route as TodoIdRouteImport } from './routes/todo/$id'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as SignUpSplatRouteImport } from './routes/sign-up.$'
+import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
+import { Route as AuthenticatedTodoIndexRouteImport } from './routes/_authenticated/todo/index'
+import { Route as AuthenticatedTodoIdRouteImport } from './routes/_authenticated/todo/$id'
 
-const IndexRoute = IndexRouteImport.update({
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const SignUpSplatRoute = SignUpSplatRouteImport.update({
+  id: '/sign-up/$',
+  path: '/sign-up/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TodoIndexRoute = TodoIndexRouteImport.update({
+const SignInSplatRoute = SignInSplatRouteImport.update({
+  id: '/sign-in/$',
+  path: '/sign-in/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedTodoIndexRoute = AuthenticatedTodoIndexRouteImport.update({
   id: '/todo/',
   path: '/todo/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const TodoIdRoute = TodoIdRouteImport.update({
+const AuthenticatedTodoIdRoute = AuthenticatedTodoIdRouteImport.update({
   id: '/todo/$id',
   path: '/todo/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/todo/$id': typeof TodoIdRoute
-  '/todo': typeof TodoIndexRoute
+  '/sign-in/$': typeof SignInSplatRoute
+  '/sign-up/$': typeof SignUpSplatRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/todo/$id': typeof AuthenticatedTodoIdRoute
+  '/todo': typeof AuthenticatedTodoIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/todo/$id': typeof TodoIdRoute
-  '/todo': typeof TodoIndexRoute
+  '/sign-in/$': typeof SignInSplatRoute
+  '/sign-up/$': typeof SignUpSplatRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/todo/$id': typeof AuthenticatedTodoIdRoute
+  '/todo': typeof AuthenticatedTodoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/todo/$id': typeof TodoIdRoute
-  '/todo/': typeof TodoIndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/sign-in/$': typeof SignInSplatRoute
+  '/sign-up/$': typeof SignUpSplatRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/todo/$id': typeof AuthenticatedTodoIdRoute
+  '/_authenticated/todo/': typeof AuthenticatedTodoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/todo/$id' | '/todo'
+  fullPaths: '/sign-in/$' | '/sign-up/$' | '/' | '/todo/$id' | '/todo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/todo/$id' | '/todo'
-  id: '__root__' | '/' | '/todo/$id' | '/todo/'
+  to: '/sign-in/$' | '/sign-up/$' | '/' | '/todo/$id' | '/todo'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/sign-in/$'
+    | '/sign-up/$'
+    | '/_authenticated/'
+    | '/_authenticated/todo/$id'
+    | '/_authenticated/todo/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  TodoIdRoute: typeof TodoIdRoute
-  TodoIndexRoute: typeof TodoIndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  SignInSplatRoute: typeof SignInSplatRoute
+  SignUpSplatRoute: typeof SignUpSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/sign-up/$': {
+      id: '/sign-up/$'
+      path: '/sign-up/$'
+      fullPath: '/sign-up/$'
+      preLoaderRoute: typeof SignUpSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/todo/': {
-      id: '/todo/'
+    '/sign-in/$': {
+      id: '/sign-in/$'
+      path: '/sign-in/$'
+      fullPath: '/sign-in/$'
+      preLoaderRoute: typeof SignInSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/todo/': {
+      id: '/_authenticated/todo/'
       path: '/todo'
       fullPath: '/todo'
-      preLoaderRoute: typeof TodoIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedTodoIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/todo/$id': {
-      id: '/todo/$id'
+    '/_authenticated/todo/$id': {
+      id: '/_authenticated/todo/$id'
       path: '/todo/$id'
       fullPath: '/todo/$id'
-      preLoaderRoute: typeof TodoIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedTodoIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedTodoIdRoute: typeof AuthenticatedTodoIdRoute
+  AuthenticatedTodoIndexRoute: typeof AuthenticatedTodoIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedTodoIdRoute: AuthenticatedTodoIdRoute,
+  AuthenticatedTodoIndexRoute: AuthenticatedTodoIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  TodoIdRoute: TodoIdRoute,
-  TodoIndexRoute: TodoIndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  SignInSplatRoute: SignInSplatRoute,
+  SignUpSplatRoute: SignUpSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

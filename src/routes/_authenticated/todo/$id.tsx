@@ -20,7 +20,7 @@ const getSpecificTodo = createServerFn({ method: "GET" })
     return todo.data;
   });
 
-export const Route = createFileRoute("/todo/$id")({
+export const Route = createFileRoute("/_authenticated/todo/$id")({
   component: RouteComponent,
   loader: ({ params }) => getSpecificTodo({ data: { id: params.id } }),
 });

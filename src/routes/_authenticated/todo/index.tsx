@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { listTodos } from "@/server-function/todos/list";
 import type { Database } from "@/types/database.types";
 
-export const Route = createFileRoute("/todo/")({
+export const Route = createFileRoute("/_authenticated/todo/")({
   component: RouteComponent,
   loader: async () => {
     const todos = await listTodos();
