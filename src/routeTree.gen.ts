@@ -13,6 +13,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as SignUpSplatRouteImport } from './routes/sign-up.$'
 import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
+import { Route as ApiWebhookRouteImport } from './routes/api/webhook'
 import { Route as AuthenticatedTodoIndexRouteImport } from './routes/_authenticated/todo/index'
 import { Route as AuthenticatedTodoIdRouteImport } from './routes/_authenticated/todo/$id'
 
@@ -35,6 +36,11 @@ const SignInSplatRoute = SignInSplatRouteImport.update({
   path: '/sign-in/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWebhookRoute = ApiWebhookRouteImport.update({
+  id: '/api/webhook',
+  path: '/api/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedTodoIndexRoute = AuthenticatedTodoIndexRouteImport.update({
   id: '/todo/',
   path: '/todo/',
@@ -47,6 +53,7 @@ const AuthenticatedTodoIdRoute = AuthenticatedTodoIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/api/webhook': typeof ApiWebhookRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
   '/': typeof AuthenticatedIndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByFullPath {
   '/todo': typeof AuthenticatedTodoIndexRoute
 }
 export interface FileRoutesByTo {
+  '/api/webhook': typeof ApiWebhookRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
   '/': typeof AuthenticatedIndexRoute
@@ -63,6 +71,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/api/webhook': typeof ApiWebhookRoute
   '/sign-in/$': typeof SignInSplatRoute
   '/sign-up/$': typeof SignUpSplatRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -71,12 +80,19 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/sign-in/$' | '/sign-up/$' | '/' | '/todo/$id' | '/todo'
+  fullPaths:
+    | '/api/webhook'
+    | '/sign-in/$'
+    | '/sign-up/$'
+    | '/'
+    | '/todo/$id'
+    | '/todo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/sign-in/$' | '/sign-up/$' | '/' | '/todo/$id' | '/todo'
+  to: '/api/webhook' | '/sign-in/$' | '/sign-up/$' | '/' | '/todo/$id' | '/todo'
   id:
     | '__root__'
     | '/_authenticated'
+    | '/api/webhook'
     | '/sign-in/$'
     | '/sign-up/$'
     | '/_authenticated/'
@@ -86,6 +102,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  ApiWebhookRoute: typeof ApiWebhookRoute
   SignInSplatRoute: typeof SignInSplatRoute
   SignUpSplatRoute: typeof SignUpSplatRoute
 }
@@ -118,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/sign-in/$'
       fullPath: '/sign-in/$'
       preLoaderRoute: typeof SignInSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/webhook': {
+      id: '/api/webhook'
+      path: '/api/webhook'
+      fullPath: '/api/webhook'
+      preLoaderRoute: typeof ApiWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/todo/': {
@@ -154,6 +178,7 @@ const AuthenticatedRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  ApiWebhookRoute: ApiWebhookRoute,
   SignInSplatRoute: SignInSplatRoute,
   SignUpSplatRoute: SignUpSplatRoute,
 }

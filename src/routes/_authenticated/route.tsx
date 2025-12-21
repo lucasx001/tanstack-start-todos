@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { UserStateProvider } from "@/providers/user-state";
 import { getAuthState } from "@/server-function/auth";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -7,7 +8,7 @@ export const Route = createFileRoute("/_authenticated")({
 
     if (!userId) {
       throw redirect({
-        to: "/sign-in",
+        to: "/sign-in/$",
         search: {
           // 记录用户原本想去的页面
           redirect: location.href,
@@ -20,9 +21,9 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AppLayoutComponent() {
   return (
-    <div>
-      <h1>Welcome to Todo App!!!</h1>
+    <UserStateProvider>
+      <h1 className="text-center font-bold text-2xl">Welcome to Todo App!!!</h1>
       <Outlet />
-    </div>
+    </UserStateProvider>
   );
 }

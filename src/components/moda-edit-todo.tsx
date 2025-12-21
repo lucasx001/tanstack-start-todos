@@ -23,7 +23,7 @@ interface Props {
   onDismiss?: () => void;
   initialValues: Omit<
     Database["public"]["Tables"]["todos"]["Row"],
-    "created_at"
+    "created_at" | "user_id"
   >;
 }
 

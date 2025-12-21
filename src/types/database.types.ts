@@ -20,18 +20,56 @@ export type Database = {
           id: string
           isCompleted: boolean
           title: string
+          user_id: number
         }
         Insert: {
           created_at?: string
           id?: string
           isCompleted: boolean
           title: string
+          user_id: number
         }
         Update: {
           created_at?: string
           id?: string
           isCompleted?: boolean
           title?: string
+          user_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "todos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          clerk_user_id: string
+          created_at: string
+          email: string
+          id: number
+          name: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          clerk_user_id: string
+          created_at?: string
+          email: string
+          id?: number
+          name?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          clerk_user_id?: string
+          created_at?: string
+          email?: string
+          id?: number
+          name?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }

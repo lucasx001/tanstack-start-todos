@@ -23,13 +23,13 @@ export const Route = createFileRoute("/_authenticated/todo/")({
   loader: async () => {
     const todos = await listTodos();
 
-    return todos;
+    return { todos };
   },
 });
 
 type TodoItem = Omit<
   Database["public"]["Tables"]["todos"]["Row"],
-  "created_at"
+  "created_at" | "user_id"
 >;
 
 interface ModalDeleteTodoProps {
@@ -52,7 +52,7 @@ export type ModalData =
   | ModalDeleteTodoProps;
 
 function RouteComponent() {
-  const todos = Route.useLoaderData();
+  const { todos } = Route.useLoaderData();
 
   const [modal, setModal] = useState<ModalData | null>(null);
 
