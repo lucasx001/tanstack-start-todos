@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/tanstack-react-start";
 import { useRouter } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { LoadingSkeleton } from "@/components/loading-skeletion";
+import { LoadingSkeleton } from "@/components/loading-skeleton";
 import { PropsContext } from "./context";
 
 export function UserStateProvider({ children }: { children?: ReactNode }) {

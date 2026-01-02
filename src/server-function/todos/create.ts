@@ -20,14 +20,16 @@ export const createTodo = createServerFn({ method: "POST" })
     const user = await clerkClient().users.getUser(userId);
     const supabaseServerClient = getSupabaseServerClient();
 
-    const { data: supabaseUsers } = await supabaseServerClient
+    const { data: supabaseUser } = await supabaseServerClient
       .from("users")
       .select("id")
-      .eq("clerk_user_id", userId);
+      .eq("clerk_user_id", userId)
+      .limit(1)
+      .single();
 
-    let supabaseUserId = supabaseUsers?.[0]?.id;
+    let supabaseUserId = supabaseUser?.id;
 
-    if (!supabaseUsers || supabaseUsers.length === 0) {
+    if (!supabaseUser) {
       supabaseUserId = await createUser({
         data: {
           email: user.emailAddresses[0]?.emailAddress ?? "",

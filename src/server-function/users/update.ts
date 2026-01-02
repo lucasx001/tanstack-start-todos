@@ -14,11 +14,11 @@ export const updateUser = createServerFn({ method: "POST" })
         email,
         name: username,
       })
-      .select("id");
+      .select("id").limit(1).single();
 
-    if (!data?.[0].id) {
+    if (!data?.id) {
       throw new Error("Failed to create user.");
     }
 
-    return data[0].id;
+    return data.id;
   });
