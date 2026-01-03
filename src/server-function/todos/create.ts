@@ -27,6 +27,8 @@ export const createTodo = createServerFn({ method: "POST" })
       .limit(1)
       .single();
 
+    console.log(supabaseUser, user);
+
     let supabaseUserId = supabaseUser?.id;
 
     if (!supabaseUser) {

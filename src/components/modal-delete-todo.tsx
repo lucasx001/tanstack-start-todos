@@ -3,7 +3,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -51,20 +50,18 @@ export function ModalDeleteTodo({ id, onDismiss }: Props) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>
+          <AlertDialogCancel asChild>
             <Button>Cancel</Button>
           </AlertDialogCancel>
-          <AlertDialogAction>
-            <LoadingButton
-              isPending={isPending}
-              variant="destructive"
-              onClick={() => {
-                mutate();
-              }}
-            >
-              Confirm
-            </LoadingButton>
-          </AlertDialogAction>
+          <LoadingButton
+            isPending={isPending}
+            variant="destructive"
+            onClick={() => {
+              mutate();
+            }}
+          >
+            <span>Confirm</span>
+          </LoadingButton>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

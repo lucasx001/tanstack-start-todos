@@ -16,11 +16,9 @@ export function LoadingButton({
   return (
     <Button
       disabled={isPending}
-      onClick={(e) => {
-        onClick?.(e);
-      }}
-      {...props}
+      onClick={onClick}
       className={cn("relative", className)}
+      {...props}
     >
       {isPending && (
         <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-transparent">

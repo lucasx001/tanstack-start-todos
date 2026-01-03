@@ -74,7 +74,7 @@ function RouteComponent() {
           <span>Add Todo</span>
           <PlusIcon />
         </Button>
-        <Card className="w-full max-w-sm">
+        <Card className="w-[400px]">
           <CardHeader>
             <CardTitle>Your todos</CardTitle>
             <CardDescription>

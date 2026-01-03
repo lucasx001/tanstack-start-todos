@@ -87,7 +87,7 @@ export function ModalEditTodo({ onDismiss, initialValues }: Props) {
           </div>
         </div>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button>Close</Button>
           </DialogClose>
           <LoadingButton

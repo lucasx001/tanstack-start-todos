@@ -54,7 +54,7 @@ export function ModalNewTodo({ onDismiss }: Props) {
           <Input placeholder="Input todo title" ref={inputRef} />
         </div>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button>Close</Button>
           </DialogClose>
           <LoadingButton
