@@ -1,6 +1,7 @@
 import { auth, clerkClient } from "@clerk/tanstack-react-start/server";
 import { createServerFn } from "@tanstack/react-start";
 import z from "zod";
+import { cuid } from "@/lib/utils";
 import { getSupabaseServerClient } from "@/supabase";
 import { createUser } from "../users/create";
 
@@ -27,8 +28,6 @@ export const createTodo = createServerFn({ method: "POST" })
       .limit(1)
       .single();
 
-    console.log(supabaseUser, user);
-
     let supabaseUserId = supabaseUser?.id;
 
     if (!supabaseUser) {
@@ -45,9 +44,19 @@ export const createTodo = createServerFn({ method: "POST" })
       throw new Error("Fail to create todo.");
     }
 
+    const todoId = cuid()
+
     await supabaseServerClient.from("todos").insert({
+      id: todoId,
       isCompleted: false,
       title: data.title,
       user_id: supabaseUserId,
-    });
+    })
+
+    return {
+      id: todoId,
+      isCompleted: false,
+      title: data.title,
+      user_id: supabaseUserId,
+    }
   });

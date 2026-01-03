@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { queryKeys } from "@/lib/query-keys";
+import type { TodoListItem } from "@/server-function/todos/list";
 import { updateTodo } from "@/server-function/todos/update";
 import type { Database } from "@/types/database.types";
 import { LoadingButton } from "./loading-button";
@@ -48,7 +49,25 @@ export function ModalEditTodo({ onDismiss, initialValues }: Props) {
     },
     onSuccess: () => {
       toast("Edit todo successfully!!!");
-      qc.invalidateQueries({ queryKey: queryKeys.todos.list() });
+      qc.setQueryData<TodoListItem[]>(queryKeys.todos.list(), (oldData) => {
+        if (!oldData) {
+          return
+        }
+
+        return oldData.map(item => {
+          if (item.id === id) {
+            return {
+              ...item,
+              title,
+              isCompleted,
+            }
+          }
+
+          return {
+            ...item
+          }
+        })
+      })
       setIsOpen(false);
     },
   });
@@ -88,7 +107,7 @@ export function ModalEditTodo({ onDismiss, initialValues }: Props) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button>Close</Button>
+            <Button variant="outline">Close</Button>
           </DialogClose>
           <LoadingButton
             isPending={isPending}

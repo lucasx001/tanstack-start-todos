@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { queryKeys } from "@/lib/query-keys";
 import { createTodo } from "@/server-function/todos/create";
+import type { TodoListItem } from "@/server-function/todos/list";
 import { LoadingButton } from "./loading-button";
 import { Button } from "./ui/button";
 import {
@@ -28,11 +29,17 @@ export function ModalNewTodo({ onDismiss }: Props) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (title: string) => {
-      await createTodo({ data: { title } });
+      return await createTodo({ data: { title } });
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast("Create todo successfully.");
-      qc.invalidateQueries({ queryKey: queryKeys.todos.list() });
+      qc.setQueryData<TodoListItem[]>(queryKeys.todos.list(), (oldData) => {
+        if (!oldData) {
+          return
+        }
+
+        return [...oldData, data]
+      })
       setIsOpen(false);
     },
   });
@@ -55,7 +62,7 @@ export function ModalNewTodo({ onDismiss }: Props) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button>Close</Button>
+            <Button variant="outline">Close</Button>
           </DialogClose>
           <LoadingButton
             isPending={isPending}

@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { PlusIcon, SquarePenIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
-import { ModalEditTodo } from "@/components/moda-edit-todo";
+import { LoadingSkeleton } from "@/components/loading-skeleton";
 import { ModalDeleteTodo } from "@/components/modal-delete-todo";
+import { ModalEditTodo } from "@/components/modal-edit-todo";
 import { ModalNewTodo } from "@/components/modal-new-todo";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,10 +54,8 @@ export type ModalData =
 
 function RouteComponent() {
   const { todos } = Route.useLoaderData();
-
   const [modal, setModal] = useState<ModalData | null>(null);
-
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: queryKeys.todos.list(),
     queryFn: listTodos,
     initialData: todos,
@@ -74,7 +73,7 @@ function RouteComponent() {
           <span>Add Todo</span>
           <PlusIcon />
         </Button>
-        <Card className="w-[400px]">
+        <Card className="min-w-[400px] max-w-[800px]">
           <CardHeader>
             <CardTitle>Your todos</CardTitle>
             <CardDescription>
@@ -82,7 +81,8 @@ function RouteComponent() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ul>
+            {
+              isLoading ? <LoadingSkeleton /> : (<ul>
               {data.map((todo) => (
                 <li
                   key={todo.id}
@@ -91,7 +91,9 @@ function RouteComponent() {
                     todo.isCompleted && "line-through",
                   )}
                 >
-                  <span>{todo.title}</span>
+                  <Link to={todo.id}>
+                    <span className="hover:underline hover:underline-offset-4">{todo.title}</span>
+                  </Link>
                   <div className="flex items-center gap-2">
                     <Button
                       variant="ghost"
@@ -112,7 +114,9 @@ function RouteComponent() {
                   </div>
                 </li>
               ))}
-            </ul>
+            </ul>)
+            }
+
           </CardContent>
         </Card>
       </div>

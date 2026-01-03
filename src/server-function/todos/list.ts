@@ -1,5 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getSupabaseServerClient } from "@/supabase";
+export interface TodoListItem {
+    id: string;
+    title: string;
+    isCompleted: boolean;
+}
 
 export const listTodos = createServerFn({ method: "GET" }).handler(async () => {
   const todos = await getSupabaseServerClient()

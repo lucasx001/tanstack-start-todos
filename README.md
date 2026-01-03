@@ -1,4 +1,10 @@
-Welcome to your new TanStack app! 
+Welcome to your new TanStack app!
+
+# Tech Stack
+- Tanstack Start + Tanstack Router + Tanstack Query
+- Ngrok for hosting the API on the public internet and response the webhook of clerk user update
+- Clerk for user auth
+- Supabase for database management
 
 # Getting Started
 

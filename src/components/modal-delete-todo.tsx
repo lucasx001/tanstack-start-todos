@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { queryKeys } from "@/lib/query-keys";
 import { deleteTodo } from "@/server-function/todos/delete";
+import type { TodoListItem } from "@/server-function/todos/list";
 import { LoadingButton } from "./loading-button";
 import { Button } from "./ui/button";
 
@@ -29,7 +30,13 @@ export function ModalDeleteTodo({ id, onDismiss }: Props) {
     },
     onSuccess: () => {
       toast.success("Todo deleted successfully");
-      qc.invalidateQueries({ queryKey: queryKeys.todos.list() });
+      qc.setQueryData<TodoListItem[]>(queryKeys.todos.list(), (oldData) => {
+        if (!oldData) {
+          return
+        }
+
+        return oldData.filter(item => item.id !== id)
+      })
       setIsOpen(false);
     },
   });
@@ -51,7 +58,7 @@ export function ModalDeleteTodo({ id, onDismiss }: Props) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel asChild>
-            <Button>Cancel</Button>
+            <Button variant="outline">Cancel</Button>
           </AlertDialogCancel>
           <LoadingButton
             isPending={isPending}

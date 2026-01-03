@@ -51,6 +51,7 @@ export const Route = createFileRoute("/api/webhook")({
                 username: user.username ?? "",
               },
             });
+
             break;
           }
           case "user.updated": {
@@ -66,11 +67,11 @@ export const Route = createFileRoute("/api/webhook")({
             break;
           }
 
-          case "user.deleted":
+          case "user.deleted": {
             const { id } = event.data;
-            // TODO: cleanup
             await deleteUser({ data: { id } });
             break;
+          }
         }
 
         return new Response("ok");
